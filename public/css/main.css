@@ -96,9 +96,18 @@ textarea {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-body, html {
+html {
     height: 100%;
+
 }
+
+body { 
+    padding-top: 70px; 
+    height:100%;
+
+}
+
+
 #ng-view {
     position: relative;
     height: 100%;
@@ -110,14 +119,6 @@ body, html {
     border-style:solid;
     border-width:1px;
 }
-
-/*.container   {
-
-position: absolute;
-
-
-
-}*/
 
 
 
