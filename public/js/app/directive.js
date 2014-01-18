@@ -2,6 +2,7 @@ app.directive('liveEdit', function() {
 	var link = function(scope, element, attrs) {
 		var editor = ace.edit(element.attr('id'));
 		editor.setTheme("ace/theme/monokai");
+		editor.setShowPrintMargin(false);
 		editor.focus();
 		console.log(scope.title);
 

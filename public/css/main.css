@@ -118,11 +118,17 @@ body {
     height: 100%;
 }
 
+.code_container_row {
+    padding-bottom: 10px;
+}
+
 #editor {
     height: 100%;
     width: 100%;
     border-style:solid;
     border-width:1px;
+    border-radius: 10px;
+    margin-bottom: 5px;
 }
 
 .main_page {
