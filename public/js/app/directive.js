@@ -3,6 +3,7 @@ app.directive('useFile', function($routeParams) {
 		var callback = scope.loadEditor;
 		var opts = {
 		readAsDefault: 'Text',
+		dragClass: 'modal-text-droppable',
 		on : {
 			load: function(e, file) {
 				var result = e.target.result;

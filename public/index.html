@@ -13,7 +13,8 @@
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-        <link rel="stylesheet" href="/css/bootstrap.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="/css/normalize.css">
         <link rel="stylesheet" href="/css/main.css">
 
@@ -33,7 +34,11 @@
               </button>
               <a class="navbar-brand" href="index.html">Web Text Editor</a>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="" data-ng-click="openModal()">Upload</a></li>
+                <li>
+                    <button type="button" class="btn btn-default navbar-btn" data-ng-click="openModal()">
+                        <span class="glyphicon glyphicon-cloud-upload"></span> Upload
+                    </button>
+                </li>
                 <form class="navbar-form navbar-left newfile" data-ng-submit="createFile()">
                     <div class="form-group">
                         <input type="text" data-ng-model="filename" class="form-control" placeholder="File path">
