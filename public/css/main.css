@@ -104,6 +104,7 @@ html {
 body { 
     padding-top: 70px; 
     height:100%;
+    background-color: #6E6E6E;
 
 }
 
@@ -115,9 +116,30 @@ body {
 #editor {
     position: absolute;
     height: 100%;
-    width: 60%;
+    width: 100%;
     border-style:solid;
     border-width:1px;
+}
+
+.main_page {
+    background-image: url('/img/front.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 120%;
+    height:100%;
+    width: 100%;
+}
+
+.main_page .jumbotron {
+    background-color:rgba(0, 0, 0, 0);
+}
+
+.main_page .jumbotron h1 {
+    color: white;
+}
+
+.main_page .jumbotron p {
+    color: white;
 }
 
 
