@@ -13,10 +13,19 @@ app.directive('liveEdit', function() {
 		return language;
 	};
 	var link = function(scope, element, attrs) {
+		ace.require("ace/ext/language_tools");
 		var editor = ace.edit(element.attr('id'));
 		editor.setTheme("ace/theme/monokai");
 		editor.setShowPrintMargin(false);
 		editor.focus();
+<<<<<<< HEAD
+=======
+		console.log(scope.title);
+		editor.setOptions({
+    	enableBasicAutocompletion: true,
+    	 enableSnippets: true
+		});
+>>>>>>> b4f4c0586ce3988558894c064b43190b66535ee1
 
 		sharejs.open(scope.title, 'text', function(error, doc) {
 			doc.attach_ace(editor);
