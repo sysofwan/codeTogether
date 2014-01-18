@@ -8,7 +8,7 @@ app.config(function($routeProvider, $locationProvider) {
            controller: 'FrontPageController',
            templateUrl: '/partials/main.html'
        })
-       .when('/code/:name', {
+       .when('/code/:title', {
            controller: 'CodeEditController',
            templateUrl: '/partials/coding.html'
        })
