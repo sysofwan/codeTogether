@@ -106,10 +106,18 @@ body, html {
 #editor {
     position: absolute;
     height: 100%;
-    width: 100%;
+    width: 60%;
+    border-style:solid;
+    border-width:1px;
 }
 
+/*.container   {
 
+position: absolute;
+
+
+
+}*/
 
 
 
