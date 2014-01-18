@@ -3,17 +3,14 @@ app.controller('FrontPageController', function($scope) {
 
 });
 
-app.controller('CodeEditController', function($scope, $routeParams, localStorageService) {
+app.controller('CodeEditController', function($scope, $routeParams, codeEditorService) {
 	'use strict'
 	$scope.languages = ['C++', 'Javascript', 'Python', 'Java', 'Go', 'HTML', 'Haskell', 'Scheme', 'Perl',
 						'Jade', 'Matlab', 'C#', 'LaTeX', 'Ruby', 'PHP', 'prolog', 'Pascal', 'Objective-C'];
-	$scope.title = $routeParams.title;
-	var langKey = 'lang-' + $scope.title;
-	$scope.inputLanguage = localStorageService.get(langKey);
-	$scope.selected = $scope.inputLanguage;
+	$scope.title = codeEditorService.getTitle();
+	$scope.selected = codeEditorService.getLanguage();
 	$scope.languageChanged = function() {
-		$scope.inputLanguage = $scope.selected;
-		localStorageService.add(langKey, $scope.inputLanguage);
+		codeEditorService.setLanguage($scope.selected);
 	};
 });
 
@@ -29,8 +26,9 @@ app.controller('NavController', function($scope, $location, $modal) {
 	}
 });
 
-app.controller('ModalInstanceController', function($scope, $modalInstance) {
-	$scope.dismiss = function() {
+app.controller('ModalInstanceController', function($scope, $modalInstance, codeEditorService) {
+	$scope.loadEditor = function(newContent) {
+		codeEditorService.setValue(newContent);
 		$modalInstance.dismiss('done');
 	};
 });
