@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute', 'ui.bootstrap']);
+var app = angular.module('app', ['ngRoute', 'ui.bootstrap', 'LocalStorageModule']);
 
 app.config(function($routeProvider, $locationProvider) {
     'use strict';

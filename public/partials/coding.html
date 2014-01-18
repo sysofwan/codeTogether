@@ -6,6 +6,7 @@
 <div class="container code_container">
 	<div class="row code_container_row">
 		<div class="col-md-12 toolbar">
+			<div class="pull-left code-title">{{ title }}</div>
 			<input type="text" ng-model="selected" placeholder="Language" data-typeahead="language for language in languages | filter:$viewValue | limitTo:8" data-typeahead-on-select="languageChanged()" 
 			class="form-control language-input pull-right">
 		</div>
