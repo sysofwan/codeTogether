@@ -1,10 +1,23 @@
 var connect = require('connect'),
-    sharejs = require('share').server;
+    sharejs = require('share').server
+    connectRoute = require('connect-route')
+    render = require('connect-render');
 
 var server = connect(
+	  render({root: __dirname + '/public', layout: 'index.html', cache: false}),
       connect.logger(),
       connect.static(__dirname + '/public')
     );
+
+server.use(connectRoute(function(router) {
+	router.get('/code/:name', function (req, res, next) {
+    	res.render('index.html');
+    });
+	router.get('/', function (req, res, next) {
+        res.end('index');
+        console.log('hi!!');
+    });
+}));
 var options = {db: {type: 'none'}}; // See docs for options. {type: 'redis'} to enable persistance.
 
 // Attach the sharejs REST and Socket.io interfaces to the server
