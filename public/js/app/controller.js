@@ -3,21 +3,24 @@ app.controller('FrontPageController', function($scope) {
 
 });
 
-app.controller('CodeEditController', function($scope, $routeParams, codeEditorService) {
+app.controller('CodeEditController', function($scope, codeEditorService) {
 	'use strict'
+	codeEditorService.init();
 	$scope.languages = ['C++', 'Javascript', 'Python', 'Java', 'Go', 'HTML', 'Haskell', 'Scheme', 'Perl',
 						'Jade', 'Matlab', 'C#', 'LaTeX', 'Ruby', 'PHP', 'prolog', 'Pascal', 'Objective-C'];
 	$scope.title = codeEditorService.getTitle();
 	$scope.selected = codeEditorService.getLanguage();
+
 	$scope.languageChanged = function() {
 		codeEditorService.setLanguage($scope.selected);
 	};
 });
 
-app.controller('NavController', function($scope, $location, $modal) {
+app.controller('NavController', function($scope, $location, $modal, codeEditorService) {
 	$scope.createFile = function() {
 		$location.url('/code/' + $scope.filename);
 	};
+	$scope.title = codeEditorService.getTitle();
 	$scope.openModal = function() {
 		var modalInstance = $modal.open({
 			templateUrl: '/partials/uploadModal.html',
@@ -31,4 +34,8 @@ app.controller('ModalInstanceController', function($scope, $modalInstance, codeE
 		codeEditorService.setValue(newContent);
 		$modalInstance.dismiss('done');
 	};
+});
+
+app.controller('GitHubModalController', function($scope, $modal, $modalInstance, gitHubService) {
+
 });

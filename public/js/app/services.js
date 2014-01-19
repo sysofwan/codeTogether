@@ -1,8 +1,8 @@
 app.service('codeEditorService', function ($routeParams, localStorageService) {
 	var editor;
-	var title = $routeParams.title;
-	var langKey = 'lang-' + title;
-	var language = localStorageService.get(langKey);
+	var title;
+	var langKey;
+	var language;
 	var getRecognizedLanguage = function() {
 		tempLang = language.toLowerCase();
 		if (tempLang === 'c++') {
@@ -24,6 +24,9 @@ app.service('codeEditorService', function ($routeParams, localStorageService) {
 		localStorageService.add(langKey, language);
 	}
 	var init = function() {
+		title = $routeParams.title;
+		langKey = 'lang-' + title;
+		language = localStorageService.get(langKey);
 		ace.require("ace/ext/language_tools");
 		editor = ace.edit('editor');
 		editor.setTheme("ace/theme/monokai");
@@ -42,8 +45,6 @@ app.service('codeEditorService', function ($routeParams, localStorageService) {
 		}
 	};
 
-	init();
-
 	return {
 		getValue: function() {
 			return editor.getValue();
@@ -59,6 +60,39 @@ app.service('codeEditorService', function ($routeParams, localStorageService) {
 		},
 		getTitle: function() {
 			return title;
+		},
+		init: function() {
+			init();
+		}
+	};
+});
+
+app.service('gitHubService', function($http) {
+	var requestUrl = 'https://api.github.com/';
+	var username;
+	var password;
+	var isAuthorized = false;
+	var basicAuthEncode = function() {
+		return btoa(username + ':' + password);
+	};
+	var authorizeUser = function() {
+		$http.get(requestUrl)
+			.success(function(data) {
+				if (data.message !== 'Bad credentials') {
+					isAuthorized = true;
+				}
+			})
+	};
+	return {
+		setUser: function(name, pass) {
+			username = name;
+			password = pass;
+			var base64auth = basicAuthEncode();
+			$http.defaults.headers.common.Authentication = 'Basic ' + base64auth;
+			authorizeUser(); 
+		}, 
+		isUserAutherized: function() {
+			return isAuthorized;
 		}
 	};
 });
