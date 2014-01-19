@@ -76,9 +76,9 @@ app.service('gitHubService', function($http) {
 	var basicAuthEncode = function() {
 		return btoa(username + ':' + password);
 	};
-	var getContentUrl = function(repo, path) {
-		path = path || '';
-		return requestUrl + 'repos/' + username + '/' + repo + '/contents/' + path;
+	var getContentUrl = function(repo, content) {
+		path = content.path || '';
+		return requestUrl + 'repos/' + repo.owner.login + '/' + repo.name + '/contents/' + path;
 	};
 
 	var notifyObservers = function(){
@@ -105,35 +105,34 @@ app.service('gitHubService', function($http) {
 			});
 	};
 
-	var getContents = function(repo, path, callback) {
-		var url = getContentUrl(repo, path);
+	var getContents = function(repo, content, callback) {
+		var url = getContentUrl(repo, content);
 		$http.get(url)
 			.success(function(data) {
 				callback(data);
 			});
 	}
-	var getRawContent = function(repo, path, sha, callback) {
-		var url = getContentUrl(repo, path);
+	var getRawContent = function(repo, content, callback) {
+		var url = getContentUrl(repo, content);
 		$http.get(url, {headers: {Accept: 'application/vnd.github.VERSION.raw'}})
 			.success(function(data) {
 				callback(data);
 				currentFile.repo = repo;
-				currentFile.path = path;
-				currentFile.sha = sha;
+				currentFile.content = content;
 				notifyObservers();
 			});
 	};
 	var commit = function(newContent, message, callback) {
-		var url = requestUrl + 'repos/' + username + '/' + currentFile.repo + '/contents/' + currentFile.path;
+		var url = requestUrl + 'repos/' + currentFile.repo.owner.login + '/' + currentFile.repo.name + '/contents/' + currentFile.content.path;
 		var data = {
-			path: currentFile.path,
+			path: currentFile.content.path,
 			message: message,
 			content: btoa(newContent),
-			sha: currentFile.sha,
+			sha: currentFile.content.sha,
 		};
 		$http.put(url, data)
 			.success(function(data) {
-				currentFile.sha = data.content.sha;
+				currentFile.content = data.content;
 				if (callback) {
 					callback(data);
 				}

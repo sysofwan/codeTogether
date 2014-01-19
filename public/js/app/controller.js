@@ -7,7 +7,8 @@ app.controller('CodeEditController', function($scope, codeEditorService) {
 	'use strict'
 	codeEditorService.init();
 	$scope.languages = ['C++', 'Javascript', 'Python', 'Java', 'Go', 'HTML', 'Haskell', 'Scheme', 'Perl',
-						'Jade', 'Matlab', 'C#', 'LaTeX', 'Ruby', 'PHP', 'prolog', 'Pascal', 'Objective-C'];
+						'Jade', 'Matlab', 'C#', 'LaTeX', 'Ruby', 'PHP', 'prolog', 'Pascal', 'Objective-C',
+						'CSS'];
 	$scope.title = codeEditorService.getTitle();
 	$scope.selected = codeEditorService.getLanguage();
 
@@ -85,24 +86,25 @@ app.controller('GithubLoginModalController', function($scope, $modal, $modalInst
 app.controller('GithubRepoModalChooser', function($scope, $modal, $modalInstance, gitHubService, codeEditorService) {
 	$scope.title = 'Choose a repo';
 	$scope.firstCol = 'Name';
-	$scope.secondCol = '';
-	var repo = '';
+	var repo;
 
 	gitHubService.getAllRepos(function(data) {
 		$scope.contents = data;
 	});
 
 	$scope.select = function(content) {
-		$scope.title = 'Choose a file';
-		repo = repo || content.name;
+		var isRepo = !content.type;
+		if (isRepo) {
+			$scope.title = 'Choose a file';
+			repo = content;
+		}
 		if (content.type !== 'file') {
-			path = content.path || '';
-			gitHubService.getRepoContents(repo, path, function(data) {
+			gitHubService.getRepoContents(repo, content, function(data) {
 				$scope.contents = data;
 			});
 		}
 		else {
-			gitHubService.getRawContent(repo, content.path, content.sha, function(data) {
+			gitHubService.getRawContent(repo, content, function(data) {
 				codeEditorService.setValue(data);
 				$modalInstance.dismiss('done');
 			});
