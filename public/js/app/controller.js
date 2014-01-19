@@ -27,6 +27,20 @@ app.controller('NavController', function($scope, $location, $modal, codeEditorSe
 			controller: 'ModalInstanceController'
 		});
 	}
+
+	$scope.download = function() {
+		$scope.content = codeEditorService.getValue();
+		var strWindowFeatures = "menubar=yes";
+        var content = $scope.content;
+        uriContent = "data:text/plain," + encodeURIComponent(content);
+        newWindow=window.open(uriContent, "codeSave.txt", strWindowFeatures);
+
+	}
+
+
+
+
+
 });
 
 app.controller('ModalInstanceController', function($scope, $modalInstance, codeEditorService) {

@@ -12,6 +12,12 @@
               <span class="glyphicon glyphicon-cloud-upload"></span> Upload
           </button>
       </li>
+
+      <li>
+          <button type="button" class="btn btn-default navbar-btn" data-ng-click="download()" data-ng-show="title">
+              <span class="glyphicon glyphicon-cloud-upload"></span> Download
+          </button>
+      </li>
       <form class="navbar-form navbar-left newfile" data-ng-submit="createFile()">
           <div class="form-group">
               <input type="text" data-ng-model="filename" class="form-control" placeholder="File path">
