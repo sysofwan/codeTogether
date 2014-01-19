@@ -2,11 +2,16 @@
         <button type="button" class="close" data-ng-click="dismiss()" aria-hidden="true">&times;</button>
         <h3 class="modal-title">Github login</h3>
 </div>
-<div class="modal-body github-login">
-	<input type="text" class="form-control username" data-ng-model="user.name" placeholder="Username">
-	<input type="password" class="form-control password" data-ng-model="user.pass" placeholder="Password">	
-</div>
-<div class="modal-footer">
-	<button type="button" class="btn btn-default" data-ng-click="dismiss()">Close</button>
-	<button type="button" class="btn btn-primary" data-ng-click="login()">Login</button>
-</div>
+<form data-ng-submit="login()">
+	<div class="modal-body github-login">
+		<input type="text" class="form-control username" data-ng-model="user.name" placeholder="Username" required>
+		<input type="password" class="form-control password" data-ng-model="user.pass" placeholder="Password" required>
+		<div class="error" data-ng-show="autherr">
+			Authentication error. Please check username and password.
+		</div>	
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" data-ng-click="dismiss()">Close</button>
+		<button type="submit" class="btn btn-primary">Login</button>
+	</div>
+</form>

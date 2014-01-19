@@ -89,13 +89,14 @@ app.service('gitHubService', function($http) {
 
 	var currentFile = {};
 
-	var authorizeUser = function(callback) {
+	var authorizeUser = function(successCallback, failureCallback) {
 		$http.get(requestUrl)
 			.success(function(data) {
-				if (data.message !== 'Bad credentials') {
-					isAuthorized = true;
-					callback();
-				}
+				isAuthorized = true;
+				successCallback();
+			})
+			.error(function(data) {
+				failureCallback();
 			});
 	};
 	var getUserRepos = function(callback) {
@@ -139,12 +140,12 @@ app.service('gitHubService', function($http) {
 			});
 	};
 	return {
-		authorize: function(name, pass, callback) {
+		authorize: function(name, pass, successCallback, failureCallback) {
 			username = name;
 			password = pass;
 			var base64auth = basicAuthEncode();
 			$http.defaults.headers.common.Authorization = 'Basic ' + base64auth;
-			authorizeUser(callback); 
+			authorizeUser(successCallback, failureCallback); 
 		}, 
 		isUserAutherized: function() {
 			return isAuthorized;
@@ -170,6 +171,12 @@ app.service('gitHubService', function($http) {
 		},
 		commit: function(newContent, message, callback) {
 			commit(newContent, message, callback);
+		},
+		logout: function() {
+			isAuthorized = false;
+			username = '';
+			password = '';
+			this.invalidate();
 		}
 	};
 });

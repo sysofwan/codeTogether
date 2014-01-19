@@ -2,10 +2,12 @@
         <button type="button" class="close" data-ng-click="dismiss()" aria-hidden="true">&times;</button>
         <h3 class="modal-title">Commit</h3>
 </div>
-<div class="modal-body github-login">
-	<input type="text" class="form-control" data-ng-model="commit.message" placeholder="Commit message">	
-</div>
-<div class="modal-footer">
-	<button type="button" class="btn btn-default" data-ng-click="dismiss()">Close</button>
-	<button type="button" class="btn btn-primary" data-ng-click="commit()">Commit</button>
-</div>
+<form data-ng-submit="commit()">
+	<div class="modal-body github-login">
+		<input type="text" class="form-control" data-ng-model="commit.message" placeholder="Commit message" required>	
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" data-ng-click="dismiss()">Close</button>
+		<button type="submit" class="btn btn-primary">Commit</button>
+	</div>
+</form>

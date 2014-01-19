@@ -29,11 +29,26 @@ app.controller('NavController', function($scope, $location, $modal, codeEditorSe
 			controller: 'ModalInstanceController'
 		});
 	};
-	$scope.openGithubModal = function() {
+
+	var openGithubLoginModal = function() {
 		var modalInstance = $modal.open({
 			templateUrl: '/partials/githubLoginModal.html',
 			controller: 'GithubLoginModalController'
 		});
+	};
+
+	var openGithubListModal = function() {
+		var modalInstance = $modal.open({
+			templateUrl: '/partials/githubListModal.html',
+			controller: 'GithubRepoModalChooser'
+		});
+	};
+	$scope.openGithubModal = function() {
+		if (gitHubService.isUserAutherized()) {
+			openGithubListModal();
+		} else {
+			openGithubLoginModal();
+		}
 	};
 	$scope.download = function() {
 		$scope.content = codeEditorService.getValue();
@@ -71,6 +86,7 @@ app.controller('ModalInstanceController', function($scope, $modalInstance, codeE
 
 app.controller('GithubLoginModalController', function($scope, $modal, $modalInstance, gitHubService) {
 	$scope.user = {name : '', pass : ''};
+	$scope.autherr = false;
 	$scope.dismiss = function() {
 		$modalInstance.dismiss('done');
 	}
@@ -81,6 +97,9 @@ app.controller('GithubLoginModalController', function($scope, $modal, $modalInst
 				templateUrl: '/partials/githubListModal.html',
 				controller: 'GithubRepoModalChooser'
 			});
+		}, 
+		function() {
+			$scope.autherr = true;
 		});
 	};
 });
@@ -115,6 +134,10 @@ app.controller('GithubRepoModalChooser', function($scope, $modal, $modalInstance
 	$scope.dismiss = function() {
 		$modalInstance.dismiss('done');
 	};
+	$scope.logout = function() {
+		gitHubService.logout();
+		$modalInstance.dismiss('done');
+	}
 });
 
 app.controller('GithubCommitModalController', function($scope, $modalInstance, gitHubService, codeEditorService) {

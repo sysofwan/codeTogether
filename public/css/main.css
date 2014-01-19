@@ -212,6 +212,14 @@ body {
     overflow: auto;
 }
 
+input.ng-invalid.ng-dirty {
+    background-color: #FA787E;
+}
+
+.error {
+    color: red;
+}
+
 
 
 
