@@ -49,12 +49,14 @@ app.controller('NavController', function($scope, $location, $modal, codeEditorSe
 			templateUrl: '/partials/githubCommitModal.html',
 			controller: 'GithubCommitModalController'
 		});
-	}
+	};
 
 	$scope.usingGithub = false;
 	gitHubService.registerCallbacks(function() {
-		if (gitHubService.isUsingGithubFile) {
+		if (gitHubService.isUsingGithubFile()) {
 			$scope.usingGithub = true;
+		} else {
+			$scope.usingGithub = false;
 		}
 	});
 });
