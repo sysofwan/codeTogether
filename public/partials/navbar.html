@@ -5,12 +5,18 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="index.html">Web Text Editor</a>
+    <a class="navbar-brand" href="/">Web Text Editor</a>
     <ul class="nav navbar-nav navbar-right">
       <li>
           <button type="button" class="btn btn-default" data-ng-show="title" data-ng-click="openGithubModal()">Github</button>
           <button type="button" class="btn btn-default navbar-btn" data-ng-click="openModal()" data-ng-show="title">
               <span class="glyphicon glyphicon-cloud-upload"></span> Upload
+          </button>
+      </li>
+
+      <li>
+          <button type="button" class="btn btn-default navbar-btn" data-ng-click="download()" data-ng-show="title">
+              <span class="glyphicon glyphicon-cloud-upload"></span> Download
           </button>
       </li>
       <form class="navbar-form navbar-left newfile" data-ng-submit="createFile()">
