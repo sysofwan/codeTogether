@@ -4,7 +4,7 @@ var connect = require('connect'),
     render = require('connect-render');
 
 var server = connect(
-	  render({root: __dirname + '/public', layout: 'index.html', cache: false}),
+	  render({root: __dirname + '/public', layout: 'index.html', cache: wd false}),
       connect.logger(),
       connect.static(__dirname + '/public')
     );
@@ -28,4 +28,4 @@ server.listen(8000, function(){
 });
 
 
-// edit over hereuifhuibgfibxfjbgfxiubdfipii
+// edit over hereuifhuibgfibxfjbgfxiubdfipiiwedwedwedwedwed
