@@ -108,6 +108,7 @@ app.controller('GithubRepoModalChooser', function($scope, $modal, $modalInstance
 	$scope.title = 'Choose a repo';
 	$scope.firstCol = 'Name';
 	var repo;
+	var history = [];
 
 	gitHubService.getAllRepos(function(data) {
 		$scope.contents = data;
@@ -115,27 +116,50 @@ app.controller('GithubRepoModalChooser', function($scope, $modal, $modalInstance
 
 	$scope.select = function(content) {
 		var isRepo = !content.type;
+		var path = content.path || '';
+		history.push(path);
 		if (isRepo) {
 			$scope.title = 'Choose a file';
 			repo = content;
 		}
 		if (content.type !== 'file') {
-			gitHubService.getRepoContents(repo, content, function(data) {
+			gitHubService.getRepoContents(repo, path, function(data) {
 				$scope.contents = data;
 			});
 		}
 		else {
+			history = [];
 			gitHubService.getRawContent(repo, content, function(data) {
 				codeEditorService.setValue(data);
 				$modalInstance.dismiss('done');
 			});
 		}
 	};
+
+	$scope.up = function() {
+		if (history.length === 1) {
+			history.pop();
+			gitHubService.getAllRepos(function(data) {
+				$scope.contents = data;
+			});
+		}
+		else if (history.length) {
+			console.log('called!!')
+			history.pop();
+			path = history[history.length - 1]
+			console.log(path);
+			gitHubService.getRepoContents(repo, path, function(data) {
+				$scope.contents = data;
+			});
+		}
+	}
 	$scope.dismiss = function() {
+		history = [];
 		$modalInstance.dismiss('done');
 	};
 	$scope.logout = function() {
 		gitHubService.logout();
+		history = [];
 		$modalInstance.dismiss('done');
 	}
 });

@@ -76,8 +76,8 @@ app.service('gitHubService', function($http) {
 	var basicAuthEncode = function() {
 		return btoa(username + ':' + password);
 	};
-	var getContentUrl = function(repo, content) {
-		path = content.path || '';
+	var getContentUrl = function(repo, path) {
+		path = path || '';
 		return requestUrl + 'repos/' + repo.owner.login + '/' + repo.name + '/contents/' + path;
 	};
 
@@ -106,15 +106,15 @@ app.service('gitHubService', function($http) {
 			});
 	};
 
-	var getContents = function(repo, content, callback) {
-		var url = getContentUrl(repo, content);
+	var getContents = function(repo, path, callback) {
+		var url = getContentUrl(repo, path);
 		$http.get(url)
 			.success(function(data) {
 				callback(data);
 			});
 	}
 	var getRawContent = function(repo, content, callback) {
-		var url = getContentUrl(repo, content);
+		var url = getContentUrl(repo, content.path);
 		$http.get(url, {headers: {Accept: 'application/vnd.github.VERSION.raw'}})
 			.success(function(data) {
 				callback(data);
