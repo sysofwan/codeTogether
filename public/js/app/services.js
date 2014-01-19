@@ -75,24 +75,60 @@ app.service('gitHubService', function($http) {
 	var basicAuthEncode = function() {
 		return btoa(username + ':' + password);
 	};
-	var authorizeUser = function() {
+	var getContentUrl = function(repo, path) {
+		path = path || '';
+		return requestUrl + 'repos/' + username + '/' + repo + '/contents/' + path;
+	};
+
+	var authorizeUser = function(callback) {
 		$http.get(requestUrl)
 			.success(function(data) {
 				if (data.message !== 'Bad credentials') {
 					isAuthorized = true;
+					callback();
 				}
-			})
+			});
+	};
+	var getUserRepos = function(callback) {
+		$http.get(requestUrl + 'user/repos')
+			.success(function(data) {
+				callback(data);
+			});
+	};
+
+	var getContents = function(repo, path, callback) {
+		var url = getContentUrl(repo, path);
+		$http.get(url)
+			.success(function(data) {
+				callback(data);
+			});
+	}
+	var getRawContent = function(repo, path, callback) {
+		var url = getContentUrl(repo, path);
+		$http.get(url, {headers: {Accept: 'application/vnd.github.VERSION.raw'}})
+			.success(function(data) {
+				callback(data);
+			});
 	};
 	return {
-		setUser: function(name, pass) {
+		authorize: function(name, pass, callback) {
 			username = name;
 			password = pass;
 			var base64auth = basicAuthEncode();
-			$http.defaults.headers.common.Authentication = 'Basic ' + base64auth;
-			authorizeUser(); 
+			$http.defaults.headers.common.Authorization = 'Basic ' + base64auth;
+			authorizeUser(callback); 
 		}, 
 		isUserAutherized: function() {
 			return isAuthorized;
+		},
+		getAllRepos: function(callback) {
+			getUserRepos(callback);
+		},
+		getRepoContents: function(repo, path, callback) {
+			getContents(repo, path, callback);
+		},
+		getRawContent: function(repo, path, callback) {
+			getRawContent(repo, path, callback);
 		}
 	};
 });

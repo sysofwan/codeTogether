@@ -1,0 +1,23 @@
+<div class="modal-header">
+        <button type="button" class="close" data-ng-click="dismiss()" aria-hidden="true">&times;</button>
+        <h3 class="modal-title">{{ title }}</h3>
+</div>
+<div class="modal-body github-contents">
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>{{ firstCol }}</th>
+				<th>{{ secondCol }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-ng-click="select(content)" data-ng-repeat="content in contents" class="github_names">
+				<td>{{ content.name }}</td>
+				<td>{{ content.type }}</td>
+			</tr>
+		</tbody>
+	</table>	
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-default" data-ng-click="dismiss()">Close</button>
+</div>

@@ -180,12 +180,12 @@ body {
     width: 160px;
 }
 
-.modal-header {
+.upload-modal {
     height: 200px;
     padding: 20px;
 }
 
-.modal-text {
+.upload-modal-text {
     text-align: center;
     vertical-align: middle;
     line-height: 160px;   
@@ -197,6 +197,19 @@ body {
 
 .modal-text-droppable {
     border-color: green;
+}
+
+.github-login .username {
+    margin-bottom: 10px;
+}
+
+.github_names {
+    cursor: pointer;
+}
+
+.github-contents {
+    max-height: 500px;
+    overflow: auto;
 }
 
 
