@@ -72,6 +72,7 @@ app.service('gitHubService', function($http) {
 	var username;
 	var password;
 	var isAuthorized = false;
+	var observerCallbacks = [];
 	var basicAuthEncode = function() {
 		return btoa(username + ':' + password);
 	};
@@ -79,6 +80,14 @@ app.service('gitHubService', function($http) {
 		path = path || '';
 		return requestUrl + 'repos/' + username + '/' + repo + '/contents/' + path;
 	};
+
+	var notifyObservers = function(){
+    	angular.forEach(observerCallbacks, function(callback){
+      		callback();
+    	});
+  	};
+
+	var currentFile = {};
 
 	var authorizeUser = function(callback) {
 		$http.get(requestUrl)
@@ -103,11 +112,31 @@ app.service('gitHubService', function($http) {
 				callback(data);
 			});
 	}
-	var getRawContent = function(repo, path, callback) {
+	var getRawContent = function(repo, path, sha, callback) {
 		var url = getContentUrl(repo, path);
 		$http.get(url, {headers: {Accept: 'application/vnd.github.VERSION.raw'}})
 			.success(function(data) {
 				callback(data);
+				currentFile.repo = repo;
+				currentFile.path = path;
+				currentFile.sha = sha;
+				notifyObservers();
+			});
+	};
+	var commit = function(newContent, message, callback) {
+		var url = requestUrl + 'repos/' + username + '/' + currentFile.repo + '/contents/' + currentFile.path;
+		var data = {
+			path: currentFile.path,
+			message: message,
+			content: btoa(newContent),
+			sha: currentFile.sha,
+		};
+		$http.put(url, data)
+			.success(function(data) {
+				currentFile.sha = data.content.sha;
+				if (callback) {
+					callback(data);
+				}
 			});
 	};
 	return {
@@ -121,14 +150,27 @@ app.service('gitHubService', function($http) {
 		isUserAutherized: function() {
 			return isAuthorized;
 		},
+		isUsingGithubFile: function() {
+			return currentFile.repo;
+		},
 		getAllRepos: function(callback) {
 			getUserRepos(callback);
 		},
 		getRepoContents: function(repo, path, callback) {
 			getContents(repo, path, callback);
 		},
-		getRawContent: function(repo, path, callback) {
-			getRawContent(repo, path, callback);
+		getRawContent: function(repo, path, sha, callback) {
+			getRawContent(repo, path, sha, callback);
+		},
+		registerCallbacks: function(callback) {
+			observerCallbacks.push(callback);
+		},
+		invalidate: function() {
+			currentFile = {};
+			notifyObservers();
+		},
+		commit: function(newContent, message, callback) {
+			commit(newContent, message, callback);
 		}
 	};
 });

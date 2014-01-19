@@ -16,9 +16,10 @@ app.controller('CodeEditController', function($scope, codeEditorService) {
 	};
 });
 
-app.controller('NavController', function($scope, $location, $modal, codeEditorService) {
+app.controller('NavController', function($scope, $location, $modal, codeEditorService, gitHubService) {
 	$scope.createFile = function() {
 		$location.url('/code/' + $scope.filename);
+		gitHubService.invalidate();
 	};
 	$scope.title = codeEditorService.getTitle();
 	$scope.openModal = function() {
@@ -33,7 +34,6 @@ app.controller('NavController', function($scope, $location, $modal, codeEditorSe
 			controller: 'GithubLoginModalController'
 		});
 	};
-
 	$scope.download = function() {
 		$scope.content = codeEditorService.getValue();
 		var strWindowFeatures = "menubar=yes";
@@ -42,11 +42,26 @@ app.controller('NavController', function($scope, $location, $modal, codeEditorSe
         newWindow=window.open(uriContent, "codeSave.txt", strWindowFeatures);
 
 	};
+
+	$scope.openCommitModal = function() {
+		var modalInstance = $modal.open({
+			templateUrl: '/partials/githubCommitModal.html',
+			controller: 'GithubCommitModalController'
+		});
+	}
+
+	$scope.usingGithub = false;
+	gitHubService.registerCallbacks(function() {
+		if (gitHubService.isUsingGithubFile) {
+			$scope.usingGithub = true;
+		}
+	});
 });
 
-app.controller('ModalInstanceController', function($scope, $modalInstance, codeEditorService) {
+app.controller('ModalInstanceController', function($scope, $modalInstance, codeEditorService, gitHubService) {
 	$scope.loadEditor = function(newContent) {
 		codeEditorService.setValue(newContent);
+		gitHubService.invalidate();
 		$modalInstance.dismiss('done');
 	};
 });
@@ -87,7 +102,7 @@ app.controller('GithubRepoModalChooser', function($scope, $modal, $modalInstance
 			});
 		}
 		else {
-			gitHubService.getRawContent(repo, content.path, function(data) {
+			gitHubService.getRawContent(repo, content.path, content.sha, function(data) {
 				codeEditorService.setValue(data);
 				$modalInstance.dismiss('done');
 			});
@@ -97,3 +112,16 @@ app.controller('GithubRepoModalChooser', function($scope, $modal, $modalInstance
 		$modalInstance.dismiss('done');
 	};
 });
+
+app.controller('GithubCommitModalController', function($scope, $modalInstance, gitHubService, codeEditorService) {
+	$scope.commit = {message:''};
+	$scope.dismiss = function() {
+		$modalInstance.dismiss('done');
+	};
+	$scope.commit = function() {
+		gitHubService.commit(codeEditorService.getValue(), $scope.commit.message, function() {
+			alert('Your code is successfully commited');
+			$modalInstance.dismiss('done');
+		});
+	};
+})
